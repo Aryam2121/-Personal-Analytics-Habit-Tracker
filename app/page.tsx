@@ -90,10 +90,18 @@ export default function DrawingApp() {
 
   const undo = () => {
     if (!ctxRef.current || !canvasRef.current || history.length === 0) return;
+  
     const newHistory = [...history];
     const last = newHistory.pop()!;
-    setRedoStack((prev) => [...prev, ctxRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height)]);
-    ctxRef.current.putImageData(last, 0, 0);
+  
+    const currentCtx = ctxRef.current;
+    const canvas = canvasRef.current;
+  
+    if (!currentCtx || !canvas) return;
+  
+    const imageData = currentCtx.getImageData(0, 0, canvas.width, canvas.height);
+    setRedoStack((prev) => [...prev, imageData]);
+    currentCtx.putImageData(last, 0, 0);
     setHistory(newHistory);
   };
 
