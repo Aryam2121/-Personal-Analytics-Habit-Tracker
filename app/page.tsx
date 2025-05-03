@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 
 export default function DrawingApp() {
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -13,6 +14,7 @@ export default function DrawingApp() {
   const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null);
   const [history, setHistory] = useState<ImageData[]>([]);
   const [redoStack, setRedoStack] = useState<ImageData[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,7 +41,7 @@ export default function DrawingApp() {
     setIsDrawing(true);
     saveToHistory();
   };
-
+ 
   const draw = (e: React.MouseEvent) => {
     if (!isDrawing || !ctxRef.current || !canvasRef.current) return;
     const { offsetX, offsetY } = e.nativeEvent;
